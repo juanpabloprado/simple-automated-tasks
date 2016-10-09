@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Include config
-source /home/a5hley/.tasks/sites.sh
+source /home/pablo/.tasks/sites.sh
 
 # Pushbullet token
 TOKEN=''
@@ -9,14 +9,11 @@ TOKEN=''
 # Store sites with errors
 ERRORS=""
 
-for i in ${SITES[@]}
-do
-	cd "$ROOT/$i/public"
-	# Verify checksums
-	if ! /usr/local/bin/wp core verify-checksums; then
-		ERRORS="$ERRORS $i"
-	fi
-done
+cd "$ROOT/html"
+# Verify checksums
+if ! /usr/local/bin/wp core verify-checksums; then
+	ERRORS="$ERRORS $i"
+fi
 
 if [ -n "$ERRORS" ]; then
 	curl -u $TOKEN: https://api.pushbullet.com/v2/pushes -d type=note -d title="Server" -d body="Checksums verification failed for the following sites:$ERRORS"
