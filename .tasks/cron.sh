@@ -3,5 +3,8 @@
 # Include config
 source /home/pablo/.tasks/sites.sh
 
-cd "$ROOT/html"
-php -q wp-cron.php >/dev/null 2>&1
+for i in ${SITES[@]}
+do
+    cd "$ROOT/$i/html"
+    php -q wp-cron.php >/dev/null 2>&1
+done
